@@ -4,6 +4,8 @@ import net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import net.serenitybdd.core.pages.WebElementFacade;
+
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import net.serenitybdd.core.annotations.findby.FindBy;
@@ -30,7 +32,10 @@ public class DictionaryPage extends PageObject {
     }
 
     public List<String> getDefinitions() {
-        WebElementFacade definitionList = find(By.tagName("ol"));
+        WebElementFacade content = find(By.id("bodyContent"));
+        if(!content.containsElements(By.tagName("ol")))
+            return new ArrayList<>();
+        WebElementFacade definitionList = content.find(By.tagName("ol"));
         return definitionList.findElements(By.tagName("li")).stream()
                 .map( element -> element.getText() )
                 .collect(Collectors.toList());
